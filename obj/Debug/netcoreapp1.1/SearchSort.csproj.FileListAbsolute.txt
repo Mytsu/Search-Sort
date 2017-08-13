@@ -1,9 +1,0 @@
-D:\Documents\Visual Studio 2017\Projects\MetodosBusca\bin\Debug\netcoreapp1.1\SearchSort.deps.json
-D:\Documents\Visual Studio 2017\Projects\MetodosBusca\bin\Debug\netcoreapp1.1\SearchSort.runtimeconfig.json
-D:\Documents\Visual Studio 2017\Projects\MetodosBusca\bin\Debug\netcoreapp1.1\SearchSort.runtimeconfig.dev.json
-D:\Documents\Visual Studio 2017\Projects\MetodosBusca\bin\Debug\netcoreapp1.1\SearchSort.dll
-D:\Documents\Visual Studio 2017\Projects\MetodosBusca\bin\Debug\netcoreapp1.1\SearchSort.pdb
-D:\Documents\Visual Studio 2017\Projects\MetodosBusca\obj\Debug\netcoreapp1.1\SearchSort.csprojResolveAssemblyReference.cache
-D:\Documents\Visual Studio 2017\Projects\MetodosBusca\obj\Debug\netcoreapp1.1\SearchSort.AssemblyInfo.cs
-D:\Documents\Visual Studio 2017\Projects\MetodosBusca\obj\Debug\netcoreapp1.1\SearchSort.dll
-D:\Documents\Visual Studio 2017\Projects\MetodosBusca\obj\Debug\netcoreapp1.1\SearchSort.pdb
