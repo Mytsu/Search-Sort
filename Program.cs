@@ -29,6 +29,9 @@ namespace SearchSort
         #region Search Constants
         private const int _SequencialSearch = 0;
         private const int _BinarySearch = 1;
+        private const int _InterpolationSearch = 2;
+        private const int _NthLargest = 3;
+        private const int _MthSmallest = 4;
         #endregion
 
         static void Main()
@@ -142,8 +145,23 @@ namespace SearchSort
                     break;
 
                 case _SequencialSearch:
-                    Console.Write("Sequencial Search: ");
+                    Console.Write("Linear Search: ");
                     search = Search.Sequencial(data, i);
+                    break;
+
+                case _InterpolationSearch:
+                    Console.Write("Interpolation Search: ");
+                    search = Search.InterpolationSearch(data, i);
+                    break;
+
+                case _NthLargest:
+                    Console.Write("Nth Largest Search: ");
+                    search = Search.NthLargest1(data, i);
+                    break;
+
+                case _MthSmallest:
+                    Console.Write("Mth Smallest Search: ");
+                    search = Search.MthSmallest1(data, i);
                     break;
 
             }
