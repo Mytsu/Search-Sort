@@ -21,3 +21,6 @@
 - Heap
 - Count
 - Radix
+
+## Tree Algorithms
+- Binary Tree (unbalanced)
