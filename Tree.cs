@@ -28,14 +28,43 @@ namespace SearchSort {
             return new Node(data);
         }
 
-        public void InsertNode(Node root, Node newNode) {
-            if (root == null) {
-                this.root = root;
-            } else if (root.data > newNode.data) {
-                InsertNode(this.root.left, newNode);
-            } else if (root.data < newNode.data) {
-                InsertNode(root.right, newNode);
-            }             
+        public void InsertNode(Node newNode) {
+            Node atual = this.root, pai = null;
+            while(atual != null)
+            {
+                if(atual.data == newNode.data)
+                {
+                    // dados iguais, ignorar
+                    return;
+                }
+                else if(atual.data > newNode.data)
+                {
+                    // valor atual > entrada, adicionar a esquerda
+                    pai = atual;
+                    atual = atual.left;
+                }
+                else if(atual.data < newNode.data)
+                {
+                    // valor atual < entrada, adicionar a direita
+                    pai = atual;
+                    atual = atual.right;
+                }
+            }
+            count++;
+            if(pai == null)
+            {
+                // arvore vazia, fazer deste a raiz
+                root = newNode;
+            }
+            else
+            {
+                if (pai.data > newNode.data)
+                {
+                    pai.left = newNode;
+                }
+                else
+                    pai.right = newNode;
+            }
         }
 
         public int Altura(Node root) {

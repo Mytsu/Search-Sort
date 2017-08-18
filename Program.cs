@@ -8,6 +8,13 @@ namespace SearchSort
 {
     class Program
     {
+
+        #region Tree Constants
+        private const int _PREORDER = 0;
+        private const int _INORDER = 1;
+        private const int _POSORDER = 2;
+        #endregion  
+
         #region Sort Constants
         private const int _BubbleSort = 0;
         private const int _BiDiBubbleSort = 1;
@@ -36,6 +43,8 @@ namespace SearchSort
 
         static void Main()
         {
+            /*
+            // Testando algoritmos de busca
             Random rng = new Random(100);
             int[] data = new int[100];
 
@@ -46,6 +55,18 @@ namespace SearchSort
 
             SortData(data, _QuickSort);
             SearchData(data, _BinarySearch);
+            */
+            
+
+            BinaryTree bt = new BinaryTree();
+            bt.InsertNode(bt.AddNode(10));
+            bt.InsertNode(bt.AddNode(50));
+            bt.InsertNode(bt.AddNode(5));
+            bt.InsertNode(bt.AddNode(1));
+            bt.InsertNode(bt.AddNode(15));
+
+            DisplayTree(bt);
+            Console.Write("\n");
 
             Console.ReadKey();
 
@@ -151,7 +172,7 @@ namespace SearchSort
 
                 case _InterpolationSearch:
                     Console.Write("Interpolation Search: ");
-                    search = Search.InterpolationSearch(data, i);
+                    search = Search.InterpolationSearch(ref data, i);
                     break;
 
                 case _NthLargest:
@@ -269,6 +290,56 @@ namespace SearchSort
                 data[i] = (int)(rng.NextDouble() * data.Length);
             }
 
+        }
+
+        public static int Maior(int a, int b)
+        {
+            if (a > b)
+            {
+                return a;
+            }
+            else return b;
+        }
+
+        static void DisplayTree(BinaryTree bt, int type)
+        {
+            DisplayTree(bt.root, type);
+        }
+
+        static void DisplayTree(BinaryTree bt)
+        {
+            DisplayTree(bt.root, _INORDER);
+        }
+
+        static void DisplayTree(Node root, int type)
+        {
+            if (root == null) return;
+            switch (type)
+            {
+                case _PREORDER:
+                    Console.Write(root.data + " ");     
+                    if(root.left != null)
+                        DisplayTree(root.left, _PREORDER);
+                    if(root.right != null)
+                    DisplayTree(root.right, _PREORDER);
+                    break;
+
+                case _INORDER:
+                    if (root.left != null)
+                        DisplayTree(root.left, _INORDER);
+                    Console.Write(root.data + " ");
+                    if (root.right != null)
+                        DisplayTree(root.right, _INORDER);
+                    break;
+
+                case _POSORDER:
+                    if (root.left != null)
+                        DisplayTree(root.left, _POSORDER);
+                    if (root.right != null)
+                        DisplayTree(root.left, _POSORDER);
+                    Console.Write(root.data + " ");
+                    break;
+            }
         }
 
         static void DisplayData(int[] data)

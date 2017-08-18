@@ -1,0 +1,11 @@
+D:\Projetos\cs\SearchSort\bin\Debug\netcoreapp1.1\SearchSort.deps.json
+D:\Projetos\cs\SearchSort\bin\Debug\netcoreapp1.1\SearchSort.runtimeconfig.json
+D:\Projetos\cs\SearchSort\bin\Debug\netcoreapp1.1\SearchSort.runtimeconfig.dev.json
+D:\Projetos\cs\SearchSort\bin\Debug\netcoreapp1.1\SearchSort.dll
+D:\Projetos\cs\SearchSort\bin\Debug\netcoreapp1.1\SearchSort.pdb
+D:\Projetos\cs\SearchSort\obj\Debug\netcoreapp1.1\SearchSort.csprojResolveAssemblyReference.cache
+D:\Projetos\cs\SearchSort\obj\Debug\netcoreapp1.1\SearchSort.csproj.CoreCompileInputs.cache
+D:\Projetos\cs\SearchSort\obj\Debug\netcoreapp1.1\SearchSort.AssemblyInfoInputs.cache
+D:\Projetos\cs\SearchSort\obj\Debug\netcoreapp1.1\SearchSort.AssemblyInfo.cs
+D:\Projetos\cs\SearchSort\obj\Debug\netcoreapp1.1\SearchSort.dll
+D:\Projetos\cs\SearchSort\obj\Debug\netcoreapp1.1\SearchSort.pdb
