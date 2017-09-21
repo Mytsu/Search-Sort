@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace SearchSort
 {
@@ -8,6 +9,7 @@ namespace SearchSort
         public int data;
         public Node left, right;
         public Node dad;
+        public int balanceamento;
 
         public Node(int data)
         {
@@ -87,6 +89,24 @@ namespace SearchSort
                 return Pesquisa(root.right, data);
             }
             else return null;
+        }
+
+        public List<Node> InOrder()
+        {
+            List<Node> ret = new List<Node>();
+            InOrder(this.root, ret);
+            return ret;
+        }
+
+        private void InOrder(Node root, List<Node> lista)
+        {
+            if (root == null)
+            {
+                return;
+            }
+            InOrder(root.left, lista);
+            lista.Add(root);
+            InOrder(root.right, lista);
         }
     }
 
@@ -236,12 +256,227 @@ namespace SearchSort
 
         public override void Remover(int data)
         {
+            RemoverAVL(this.root, data);
+        }
 
+        private void RemoverAVL(Node root, int data)
+        {
+            if (root == null)
+            {
+                return;
+            }
+            else
+            {
+                if (root.data > data)
+                {
+                    RemoverAVL(root.left, data);
+                }
+                else if (root.data < data)
+                {
+                    RemoverAVL(root.right, data);
+                }
+                else if (root.data == data)
+                {
+                    RemoverNoEncontrado(root);
+                }
+            }
+        }
+
+        private void RemoverNoEncontrado(Node aRemover)
+        {
+            Node r;
+
+            if (aRemover.left == null || aRemover.right == null)
+            {
+                if (aRemover.dad == null)
+                {
+                    this.root = null;
+                    aRemover = null;
+                    return;
+                }
+                r = aRemover;
+            }
+            else
+            {
+                r = Sucessor(aRemover);
+                aRemover.data = r.data;
+            }
+
+            Node p;
+
+            if (r.left != null)
+            {
+                p = r.left;
+            }
+            else
+            {
+                p = r.right;
+            }
+
+            if (p != null)
+            {
+                p.dad = r.dad;
+            }
+
+            if (r.dad == null)
+            {
+                this.root = p;
+            }
+            else
+            {
+                if (r == r.dad.left)
+                {
+                    r.dad.left = p;
+                }
+                else
+                {
+                    r.dad.right = p;
+                }
+                VerificarBalanceamento(p);
+            }
+            r = null;
+        }
+
+        public Node Sucessor(Node q)
+        {
+            if (q.right != null)
+            {
+                Node r = q.right;
+                while (r.left != null)
+                {
+                    r = r.left;
+                }
+                return r;
+            }
+            else
+            {
+                Node p = q.dad;
+                while (p != null && q == p.right)
+                {
+                    q = p;
+                    p = q.dad;
+                }
+                return p;
+            }
         }
 
         public void VerificarBalanceamento(Node root)
         {
+            SetBalanceamento(root);
+            int balanceamento = root.balanceamento;
 
+            if (balanceamento == -2)
+            {
+                if (Altura(root.left.left) >= Altura(root.left.right))
+                {
+                    root = RotacaoDireita(root);
+                }
+                else
+                {
+                    root = DuplaRotacaoEsquerdaDireita(root);
+                }
+            }
+            else if (balanceamento == 2)
+            {
+                if (Altura(root.right.right) >= Altura(root.right.left))
+                {
+                    root = RotacaoEsquerda(root);
+                }
+                else
+                {
+                    root = DuplaRotacaoDireitaEsquerda(root);
+                }
+            }
+            if (root.dad != null)
+            {
+                VerificarBalanceamento(root.dad);
+            }
+            else
+            {
+                this.root = root;
+            }
+        }
+
+        private Node RotacaoDireita(Node no)
+        {
+            Node left = no.left;
+            left.dad = no.dad;
+
+            no.left = left.right;
+
+            if (no.left != null)
+            {
+                no.left.dad = no;
+            }
+
+            left.right = no;
+            no.dad = left;
+
+            if (left.dad != null)
+            {
+                if (left.dad.right.Equals(no)) {
+                    left.dad.right = left;
+                }
+                else if (left.dad.left.Equals(no))
+                {
+                    left.dad.left = left;
+                }
+            }
+
+            SetBalanceamento(no);
+            SetBalanceamento(left);
+
+            return left;
+        }
+
+        private Node RotacaoEsquerda(Node no)
+        {
+            Node right = no.right;
+            right.dad = no.dad;
+
+            no.right = right.left;
+
+            if (no.right != null)
+            {
+                no.right.dad = no;
+            }
+
+            right.left = no;
+            no.dad = right;
+
+            if (right.dad != null)
+            {
+                if (right.dad.right.Equals(no))
+                {
+                    right.dad.right = right;
+                }
+                else if (right.dad.left.Equals(no))
+                {
+                    right.dad.left = right;
+                }
+            }
+
+            SetBalanceamento(no);
+            SetBalanceamento(right);
+
+            return right;
+        }
+
+        private Node DuplaRotacaoEsquerdaDireita(Node no)
+        {
+            no.left = RotacaoEsquerda(no.left);
+            return RotacaoDireita(no);
+        }
+
+        private Node DuplaRotacaoDireitaEsquerda(Node no)
+        {
+            no.right = RotacaoDireita(no.right);
+            return RotacaoEsquerda(no);
+        }
+
+        private void SetBalanceamento(Node no)
+        {
+            no.balanceamento = Altura(no.right) - Altura(no.left);
         }
     }
 }
