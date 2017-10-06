@@ -479,4 +479,112 @@ namespace SearchSort
             no.balanceamento = Altura(no.right) - Altura(no.left);
         }
     }
+
+    class RedBlackNode : Node 
+    {
+        const int _RED = 0;
+        const int _BLACK = 1;
+        int numLeft;
+        int numRight;
+        int cor;
+
+        RedBlackNode()
+        {
+            cor = _BLACK;
+            numLeft = 0;
+            numRight = 0;
+            dad = null;
+            left = null;
+            right = null;
+        }
+
+        RedBlackNode(int data)
+        {
+            this();
+            this.data = data;
+        }
+
+    }
+
+    class RedBlackTree : Tree 
+    {
+
+        private RedBlackNode nil = new RedBlackNode();
+        private RedBlackNode root = nil;
+
+        public RedBlackTree() 
+        {
+            root.left = nil;
+            root.right = nil;
+            root.dad = nil;
+        }
+
+        private void leftRotate(RedBlackNode node) 
+        {
+            leftRotateFixUp(node);
+
+            RedBlackNode aux;
+            aux = node.right;
+            node.right = aux.left;
+            
+            if(isNil(aux.left)) 
+                aux.left.dad = node;
+
+            aux.dad = node.dad;
+
+            if(isNil(node.dad))
+                root = aux;
+
+            else
+                if(node.dad.left == node)
+                    node.dad.left = aux;
+                
+                else
+                    node.dad.right = aux;
+
+            aux.left = node;
+            node.dad = aux;
+        }
+
+        private void leftRotateFixUp(RedBlackNode node)
+        {
+            if(isNil(node.left) && node.right.left)
+            {
+                node.numLeft = 0;
+                node.numRight = 0;
+                node.right.numLeft = 1;
+            }
+            
+            else if(isNil(node.left) && !isNil(node.right.left))
+                {
+                    node.numLeft = 0;
+                    node.numRight = 1 + node.right.left.numLeft 
+                        + node.right.left.numRight;
+                    node.right.numLeft = 2 + node.right.left.numLeft
+                        + node.right.left.numRight;
+                }
+            
+            else if(!isNil(node.left) && isNil(node.right.left))
+                {
+                    node.numRight = 0;
+                    node.right.numLeft = 2 + node.left.numLeft + node.left.numRight;
+                }
+        }
+        
+        public override void InsertNode(Node node) 
+        {
+            
+        }
+        
+        public override void Remover(int data) 
+        {
+        
+        }
+
+        private boolean isNil(RedBlackNode node)
+        {
+            return node == nil;
+        }
+
+    }
 }
