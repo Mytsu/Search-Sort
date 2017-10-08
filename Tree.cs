@@ -3,13 +3,20 @@ using System.Collections.Generic;
 
 namespace SearchSort
 {
-
+    #region Abstract Tree
     class Node
     {
         public int data;
         public Node left, right;
         public Node dad;
         public int balanceamento;
+
+        public Node()
+        {
+            left = null;
+            right = null;
+            data = int.MaxValue;
+        }
 
         public Node(int data)
         {
@@ -109,7 +116,9 @@ namespace SearchSort
             InOrder(root.right, lista);
         }
     }
+    #endregion
 
+    #region Binary Tree
     class BinaryTree : Tree
     {
 
@@ -205,6 +214,9 @@ namespace SearchSort
             atual = null;
         }
     }
+    #endregion
+
+    #region AVL Tree
     class AVLTree : Tree
     {
         public override void InsertNode(Node newNode)
@@ -479,16 +491,29 @@ namespace SearchSort
             no.balanceamento = Altura(no.right) - Altura(no.left);
         }
     }
+    #endregion
 
-    class RedBlackNode : Node 
+    /*
+    * Arvore Rubro Negra baseada no design de Arsenalist 
+    * (https://github.com/Arsenalist/Red-Black-Tree-Java-Implementation)
+    * 
+    * Codigo convertido para C# por Jonathan Arantes
+    */
+
+    #region RedBlack Tree
+    class RedBlackNode
     {
-        const int _RED = 0;
-        const int _BLACK = 1;
-        int numLeft;
-        int numRight;
-        int cor;
+        public const int _RED = 0;
+        public const int _BLACK = 1;
+        public int numLeft;
+        public int numRight;
+        public int cor;
+        public int data;
+        public RedBlackNode left, right;
+        public RedBlackNode dad;
+        public int balanceamento;
 
-        RedBlackNode()
+        public RedBlackNode()
         {
             cor = _BLACK;
             numLeft = 0;
@@ -496,21 +521,21 @@ namespace SearchSort
             dad = null;
             left = null;
             right = null;
+            data = int.MaxValue;
         }
 
-        RedBlackNode(int data)
-        {
-            this();
+        public RedBlackNode(int data) : this()
+        {            
             this.data = data;
         }
 
     }
 
-    class RedBlackTree : Tree 
+    class RedBlackTree
     {
 
-        private RedBlackNode nil = new RedBlackNode();
-        private RedBlackNode root = nil;
+        private static RedBlackNode nil = new RedBlackNode();
+        private new RedBlackNode root = nil;
 
         public RedBlackTree() 
         {
@@ -519,20 +544,20 @@ namespace SearchSort
             root.dad = nil;
         }
 
-        private void leftRotate(RedBlackNode node) 
+        private void LeftRotate(RedBlackNode node) 
         {
-            leftRotateFixUp(node);
+            LeftRotateFixUp(node);
 
             RedBlackNode aux;
             aux = node.right;
             node.right = aux.left;
             
-            if(isNil(aux.left)) 
+            if(IsNil(aux.left)) 
                 aux.left.dad = node;
 
             aux.dad = node.dad;
 
-            if(isNil(node.dad))
+            if(IsNil(node.dad))
                 root = aux;
 
             else
@@ -546,16 +571,16 @@ namespace SearchSort
             node.dad = aux;
         }
 
-        private void leftRotateFixUp(RedBlackNode node)
+        private void LeftRotateFixUp(RedBlackNode node)
         {
-            if(isNil(node.left) && node.right.left)
+            if(IsNil(node.left) && IsNil(node.right.left))
             {
                 node.numLeft = 0;
                 node.numRight = 0;
                 node.right.numLeft = 1;
             }
             
-            else if(isNil(node.left) && !isNil(node.right.left))
+            else if(IsNil(node.left) && !IsNil(node.right.left))
                 {
                     node.numLeft = 0;
                     node.numRight = 1 + node.right.left.numLeft 
@@ -564,27 +589,128 @@ namespace SearchSort
                         + node.right.left.numRight;
                 }
             
-            else if(!isNil(node.left) && isNil(node.right.left))
+            else if(!IsNil(node.left) && IsNil(node.right.left))
                 {
                     node.numRight = 0;
                     node.right.numLeft = 2 + node.left.numLeft + node.left.numRight;
                 }
         }
-        
-        public override void InsertNode(Node node) 
+
+        private void RightRotate(RedBlackNode node)
         {
-            
+            RightRotateFixUp(node);
+
+            RedBlackNode aux = node.left;
+            node.left = aux.right;
+
+            if(!IsNil(aux.right))
+                aux.right.dad = node;
+
+            aux.dad = node.dad;
+
+            if (IsNil(aux.dad))
+                this.root = aux;
+
+            else if (node.dad.right == node)
+                node.dad.right = aux;
+
+            else
+                node.dad.left = aux;
+
+            aux.right = node;
+
+            node.right = aux;
+        }
+
+        private void RightRotateFixUp(RedBlackNode node)
+        {
+            if(IsNil(node.right) && IsNil(node.left.right))
+            {
+                node.numRight = 0;
+                node.numLeft = 0;
+                node.left.numRight = 1;
+            }
+
+            else if(IsNil(node.right) && !IsNil(node.left.right))
+            {
+                node.numRight = 0;
+                node.numLeft = 1 + node.left.right.numRight + node.left.right.numLeft;
+            }
+
+            else if(!IsNil(node.right) && IsNil(node.left.right))
+            {
+                node.numLeft = 0;
+                node.left.numRight = 2 + node.right.numRight + node.right.numLeft;
+            }
+
+            else
+            {
+                node.numLeft = 1 + node.left.right.numRight + node.left.right.numLeft;
+                node.left.numRight = 3 + node.right.numRight + node.right.numLeft
+                    + node.left.right.numRight + node.left.right.numLeft;
+            }
+        }
+
+        public void Insert(int data)
+        {
+            InsertNode(new RedBlackNode(data));
         }
         
-        public override void Remover(int data) 
+        public void InsertNode(RedBlackNode newNode) 
+        {
+            RedBlackNode y = nil;
+            RedBlackNode x = this.root;
+
+            while (!IsNil(x))
+            {
+                y = x;
+
+                if (newNode.data.CompareTo(x.data) < 0)
+                {
+                    x.numLeft++;
+                    x = x.left;
+                }
+
+                else
+                {
+                    x.numRight++;
+                    x = x.right;
+                }
+            }
+
+            newNode.dad = y;
+
+            if (IsNil(y))
+                this.root = newNode;
+
+            else if (newNode.data.CompareTo(y.data) < 0)
+                y.left = newNode;
+
+            else
+                y.right = newNode;
+
+            newNode.left = nil;
+            newNode.right = nil;
+            newNode.cor = RedBlackNode._RED;
+
+            InsertFixUp(newNode);
+        }
+
+        private void InsertFixUp(RedBlackNode node)
+        {
+
+        }
+        
+        public void Remover(int data) 
         {
         
         }
 
-        private boolean isNil(RedBlackNode node)
+        private bool IsNil(RedBlackNode node)
         {
             return node == nil;
         }
 
     }
+    #endregion
 }
