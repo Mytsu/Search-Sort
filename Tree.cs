@@ -698,7 +698,63 @@ namespace SearchSort
 
         private void InsertFixUp(RedBlackNode node)
         {
+            RedBlackNode y = nil;
 
+            while (node.dad.cor == RedBlackNode._RED)
+            {
+                if (node.dad == node.dad.dad.left)
+                {
+                    y = node.dad.dad.right;
+
+                    if (y.cor == RedBlackNode._RED)
+                    {
+                        node.dad.cor = RedBlackNode._BLACK;
+                        y.cor = RedBlackNode._BLACK;
+                        node.dad.dad.cor = RedBlackNode._RED;
+                        node = node.dad.dad;
+                    }
+
+                    else if (node == node.dad.right)
+                    {
+                        node = node.dad;
+                        LeftRotate(node);
+                    }
+
+                    else
+                    {
+                        node.dad.cor = RedBlackNode._BLACK;
+                        node.dad.dad.cor = RedBlackNode._RED;
+                        RightRotate(node.dad.dad);
+                    }
+                }
+
+                else
+                {
+                    y = node.dad.dad.left;
+
+                    if (y.cor == RedBlackNode._RED)
+                    {
+                        node.dad.cor = RedBlackNode._BLACK;
+                        y.cor = RedBlackNode._BLACK;
+                        node.dad.dad.cor = RedBlackNode._RED;
+                        node = node.dad.dad;
+                    }
+
+                    else if (node == node.dad.left)
+                    {
+                        node = node.dad;
+                        RightRotate(node);
+                    }
+
+                    else
+                    {
+                        node.dad.cor = RedBlackNode._BLACK;
+                        node.dad.dad.cor = RedBlackNode._RED;
+                        LeftRotate(node.dad.dad);
+                    }
+                }
+            }
+            root.cor = RedBlackNode._BLACK;
         }
         
         public void Remover(int data) 
